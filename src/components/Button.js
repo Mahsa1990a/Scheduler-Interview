@@ -1,21 +1,35 @@
 import React from "react";
+const classNames = require('classnames');
 
 import "components/Button.scss";
 
 export default function Button(props) {
 
    //need to have a condition to change the class of button:
-   let buttonClass = "button ";
+   // let buttonClass = "button ";
 
-   if (props.confirm) {
-      buttonClass += "button--confirm";
-   } else if (props.danger) {
-      buttonClass += "button--danger";
-   }
+   // if (props.confirm) {
+   //    buttonClass += "button--confirm";
+   // } else if (props.danger) {
+   //    buttonClass += "button--danger";
+   // }
 
+   // return (
+   //    <button className={buttonClass} onClick={props.onClick} disabled={props.disabled}>
+   //       {props.children}
+   //    </button>
+   // );
+
+   //using classNames library instead of having if statement:
+   const btnclass = classNames('button', {
+      // button: true,
+      " button--confirm": props.confirm,
+      " button--danger": props.danger
+   });
    return (
-      <button className={buttonClass} onClick={props.onClick} disabled={props.disabled}>
+      <button className={btnclass} onClick={props.onClick} disabled={props.disabled}>
          {props.children}
       </button>
    );
+
 }
