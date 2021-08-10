@@ -8,12 +8,13 @@ export default function InterviewerList(props) {
     return (
       <InterviewerListItem 
         key={interviewer.id}
-        id={interviewer.id}
+        // id={interviewer.id}
         name={interviewer.name}
         avatar={interviewer.avatar}
         // based on second .add for InterviewerList Test
         selected={interviewer.id === props.interviewer}
-        setInterviewer={props.setInterviewer}
+        // setInterviewer={props.setInterviewer} after deleting id, update to:
+        setInterviewer = {(event) => props.setInterviewer(interviewer.id)}
       />
     )
   });
