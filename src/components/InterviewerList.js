@@ -12,9 +12,12 @@ export default function InterviewerList(props) {
         name={interviewer.name}
         avatar={interviewer.avatar}
         // based on second .add for InterviewerList Test
+        // selected={interviewer.id === props.interviewer} UPDATE(Controlled form):
         selected={interviewer.id === props.interviewer}
         // setInterviewer={props.setInterviewer} after deleting id, update to:
-        setInterviewer = {(event) => props.setInterviewer(interviewer.id)}
+        // setInterviewer = {(event) => props.setInterviewer(interviewer.id)} UPDATE(Controlled form):
+        setInterviewer = {(event) => props.onChange(interviewer.id)}
+
       />
     )
   });
