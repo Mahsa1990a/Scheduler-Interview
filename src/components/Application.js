@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import "components/Application.scss";
 import DayList from "./DayList";
+import Appointment from "./Appointment";
 
 const days = [ // an arr of days objs
   {
@@ -19,6 +20,61 @@ const days = [ // an arr of days objs
     name: "Wednesday",
     spots: 0,
   },
+];
+
+const appointments = [
+  {
+    id: 1,
+    time: "12pm",
+  },
+  {
+    id: 2,
+    time: "1pm",
+    interview: {
+      student: "Lydia Miller-Jones",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 3,
+    time: "2pm",
+    interview: {
+      student: "Mahsa Ameri",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 4,
+    time: "3pm",
+    interview: {
+      student: "Mohsen",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 5,
+    time: "4pm",
+    interview: {
+      student: "Amir",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  }
 ];
 
 export default function Application(props) {
@@ -52,6 +108,22 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
+        {appointments.map(appointment => {
+          // console.log("appointment", appointment)
+          return(
+            <Appointment 
+              key={appointment.id} 
+  
+              // If we want every key in an object to become a prop for a component
+              // we can spread the object into the props definition
+              // id={appointment.id} 
+              // time={appointment.time} 
+              // interview={appointment.interview}           In 3 ta UPDATE:
+              {...appointment}
+            />
+          )
+        })}
+        <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
