@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -196,3 +196,23 @@ storiesOf("Appointment", module)
     onSave={action("onSave")}
     onCancel={action("onCancel")}
   />)
+// Appointment Empty
+.add("Appointment Empty", () => (
+  <Fragment>
+    {/* The first appointment shows the entire component in full */}
+    <Appointment id={1} time="12pm" />
+    {/* second one is only a header with a time to finish our list off */}
+    <Appointment id="last" time="1pm" />
+  </Fragment>
+))
+// Appointment Booked
+.add("Appointment Booked", () => (
+  <Fragment>
+    <Appointment
+      id={1}
+      time="12pm"
+      interview={{ student: "Lydia Miller-Jones", interviewer }}
+    />
+    <Appointment id="last" time="1pm" />
+  </Fragment>
+))
