@@ -23,3 +23,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/2021-08-10-21-22-24.017-VBoxSVC-8968.log
+/2021-08-10-21-22-24.029-VBoxHeadless-9530.log

@@ -11,6 +11,8 @@ import DayList from "components/DayList";
 import InterviewerListItem from "components/InterviewerListItem";
 import InterviewerList from "components/InterviewerList";
 import Appointment from "components/Appointment";
+import Header from "components/Appointment/Header";
+import Empty from "components/Appointment/Empty";
 
 // Button Test
 storiesOf("Button", module)
@@ -143,3 +145,8 @@ storiesOf("Appointment", module)
 })
 .add("Appointment", () => <Appointment />)
 .add("Appointment with time", () => <Appointment time="12pm" />)
+// Header Test (it's a child of Appointment)
+.add("Header", () => <Header />)
+.add("Header with time", () => <Header time="12pm"/>)
+// Empty
+.add("Empty", () => <Empty onAdd={action("onAdd")} />)
