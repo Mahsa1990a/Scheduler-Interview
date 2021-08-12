@@ -79,6 +79,9 @@ const appointments = [
 
 export default function Application(props) {
 
+  // will be making requests to scheduler-api server from within the Application component
+  // When we receive a response, we'll store the JSON data as the Application state.
+
   const [day, setDay] = useState("Monday");
   
   return (
