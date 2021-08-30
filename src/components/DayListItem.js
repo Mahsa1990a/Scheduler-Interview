@@ -5,9 +5,11 @@ const classNames = require('classnames');
 
 export default function DayListItem(props) {
 
+  const { name, spots, selected, setDay } = props;
+
   const DayListItemClass = classNames('day-list__item', {
-    "day-list__item--selected": props.selected,
-    "day-list__item--full": props.spots === 0
+    "day-list__item--selected": selected,
+    "day-list__item--full": spots === 0
   })
 
   const formatSpots = function(spots) {
@@ -27,10 +29,10 @@ export default function DayListItem(props) {
   return (
     // The <li> represents the entire day item
     // We are passing setDay, wrapped in anonymous func 
-    <li className={DayListItemClass} onClick={() => props.setDay(props.name)}>
-      <h2 className="text--regular">{props.name}</h2> 
+    <li className={DayListItemClass} onClick={() => setDay(name)}>
+      <h2 className="text--regular">{name}</h2> 
       {/* <h3 className="text--light">{props.spots}</h3>  for test need to update this: */}
-      <h3 className="text--light">{formatSpots(props.spots)}</h3>
+      <h3 className="text--light">{formatSpots(spots)}</h3>
     </li>
   )
 };

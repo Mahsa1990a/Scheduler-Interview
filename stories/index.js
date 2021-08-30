@@ -25,7 +25,7 @@ storiesOf("Button", module)
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
   })
   .add("Base", () => <Button>Base</Button>)
-  .add("Confirm", () => <Button confirm>Confirm</Button>) //confirm -> prop
+  .add("Confirm", () => <Button confirm>Confirm</Button>) //confirm -> is a prop to apply the .button--confirm modifier class
   //<Button danger={true}>Cancel</Button> we use shortened version:
   .add("Danger", () => <Button danger>Cancel</Button>)
   .add("Clickable", () => (
