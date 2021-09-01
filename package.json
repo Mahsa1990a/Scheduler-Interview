@@ -1,13 +1,11 @@
-
 {
   "name": "scheduler",
-
   "_comment": "We can avoid using CORS if we proxy requests to the API server.",
   "proxy": "http://localhost:8001",
-  
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "normalize.css": "^8.0.1",
     "react": "^16.9.0",

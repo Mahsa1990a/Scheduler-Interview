@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 import "components/Application.scss";
 import DayList from "./DayList";
@@ -83,6 +84,10 @@ export default function Application(props) {
   // When we receive a response, we'll store the JSON data as the Application state.
 
   const [day, setDay] = useState("Monday");
+
+  // axios.get("/api/appointments").then((response) => {
+  //   console.log(response);
+  // });
   
   return (
     <main className="layout">
