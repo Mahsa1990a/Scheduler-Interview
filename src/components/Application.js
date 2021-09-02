@@ -5,23 +5,7 @@ import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 
-// const days = [ // an arr of days objs
-//   {
-//     id: 1,
-//     name: "Monday",
-//     spots: 2,
-//   },
-//   {
-//     id: 2,
-//     name: "Tuesday",
-//     spots: 5,
-//   },
-//   {
-//     id: 3,
-//     name: "Wednesday",
-//     spots: 0,
-//   },
-// ];                           We will fetch Days from API
+// We will fetch Days from API
 
 const appointments = [
   {
@@ -83,8 +67,19 @@ export default function Application(props) {
   // will be making requests to scheduler-api server from within the Application component
   // When we receive a response, we'll store the JSON data as the Application state.
 
-  const [day, setDay] = useState("Monday");
-  const [days, setDays] = useState([]);
+  // Combined State:
+  // const [day, setDay] = useState("Monday");
+  // const [days, setDays] = useState([]);     UPDATE this 2:
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+  });
+  // Aliasing Actions after adding Combined State:
+  const setDay = day => setState({ ...state, day });
+  // const setDays = days => setState({ ...state, days }); // update: for useEffect doesn't depend on state
+  const setDays = (days) => {
+    setState(prev => ({ ...prev, days }));
+  }
 
   useEffect(() => {
     axios.get("/api/days").then((response) => {
@@ -106,9 +101,11 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList 
-            days={days}
+            // days={days} UPDATE After Combined State:
+            days={state.days}
             // day={"Monday"} Update after adding state to:
-            day={day}
+            // day={day} UPDATE After Combined State:
+            day={state.day}
             // setDay={day => console.log("day", day)} Update after adding state to:
             setDay={setDay}
           />
