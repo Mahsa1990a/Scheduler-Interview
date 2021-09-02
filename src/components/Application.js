@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 
-const days = [ // an arr of days objs
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
+// const days = [ // an arr of days objs
+//   {
+//     id: 1,
+//     name: "Monday",
+//     spots: 2,
+//   },
+//   {
+//     id: 2,
+//     name: "Tuesday",
+//     spots: 5,
+//   },
+//   {
+//     id: 3,
+//     name: "Wednesday",
+//     spots: 0,
+//   },
+// ];                           We will fetch Days from API
 
 const appointments = [
   {
@@ -84,10 +84,15 @@ export default function Application(props) {
   // When we receive a response, we'll store the JSON data as the Application state.
 
   const [day, setDay] = useState("Monday");
+  const [days, setDays] = useState([]);
 
-  // axios.get("/api/appointments").then((response) => {
-  //   console.log(response);
-  // });
+  useEffect(() => {
+    axios.get("/api/days").then((response) => {
+      console.log([...response.data]);
+      setDays([...response.data]);
+    });
+  }, []); // => [] To never rerun this effect
+  
   
   return (
     <main className="layout">
