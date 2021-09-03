@@ -2,7 +2,7 @@
   // but to show the schedule for a particular day,
   // we need to provide it an array of appointments for that day.
 
-  const getAppointmentsForDay = function(state, day) { //will return an array of appointments for the given day
+const getAppointmentsForDay = function(state, day) { //will return an array of appointments for the given day
     
     // 1. finding the object in our state.days array
     // 2. who's name matches the provided day
@@ -25,6 +25,50 @@
     // if (state.days.length === 0 || found === undefined) return [];
     // return found.appointments.map(id => state.appointments[id]);
 
-  };
+};
 
-  module.exports = { getAppointmentsForDay };
+const getInterview = function(state, interview) { 
+  // return a new object containing the interview data when we pass it an object that contains the interviewer
+
+  //Otherwise, the function should return null
+  // if (!interview) {
+  //   return null;
+  // }
+
+  // let newInterviewObj = {};
+  // let interviewerId = interview.interviewer;
+
+  // if (state.interviewers[interviewerId]) {
+  //   newInterviewObj.student = interview.student;
+  //   newInterviewObj.interviewer = state.interviewers[interviewerId];
+  //   return newInterviewObj;
+  // }
+
+  // return null;
+/////////////////////////////////////////OR
+  // if (!interview) {
+  //   return null;
+  // }
+  // const result = {
+  //   student: interview.student
+  // };
+  // let intID = interview.interviewer;
+  // result.interviewer = state.interviewers[`${intID}`];
+  // return result;
+//////////////////////////////////////////OR
+
+  if (interview === null) {
+    return null;
+  }
+  let interviewerId = interview.interviewer;
+  const found = state.interviewers[interviewerId]
+  const result = {
+    student: interview.student, // or ...interview
+    interviewer: found
+  }
+
+  return (result ? result : null)
+
+}
+
+module.exports = { getAppointmentsForDay, getInterview };

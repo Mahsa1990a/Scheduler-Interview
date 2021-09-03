@@ -4,7 +4,7 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay } from "../helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "../helpers/selectors";
 
 // We will fetch Days from API
 
@@ -88,7 +88,21 @@ export default function Application(props) {
   // const dailyAppointments = [];
   // const dailyAppointments = appointmentsss // update to use getAppointmentsForDay, not hard coded
   const dailyAppointments = getAppointmentsForDay(state, state.day); // use getAppointmentsForDay to to return an array of Appointment objects
-
+  const scedule = dailyAppointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+    return (
+      <Appointment 
+        key={appointment.id}
+        // id={appointment.id} 
+        // time={appointment.time} 
+        // interview={appointment.interview}           In 3 ta UPDATE:
+        // {...appointment}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+      />
+    )
+  })
 
   useEffect(() => {
     // axios.get("/api/days").then((response) => {
@@ -142,9 +156,9 @@ export default function Application(props) {
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
         {/* {appointments.map(appointment => {   UPDATE After deleting hardcoded appiontments */}
-        {dailyAppointments.map(appointment => {
-          // console.log("appointment", appointment)
-          return(
+        {/* {dailyAppointments.map(appointment => { // UPDATE at Retrieving Interviewer Data, put it up  */}
+        
+          {/* return(
             <Appointment 
               key={appointment.id} 
   
@@ -156,7 +170,8 @@ export default function Application(props) {
               {...appointment}
             />
           )
-        })}
+        })} */}
+        {scedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
