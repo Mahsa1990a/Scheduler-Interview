@@ -4,63 +4,64 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
+import { getAppointmentsForDay } from "../helpers/selectors";
 
 // We will fetch Days from API
 
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm",
-    interview: {
-      student: "Mahsa Ameri",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Mohsen",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "4pm",
-    interview: {
-      student: "Amir",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  }
-];
+// const appointmentsss = [
+//   {
+//     id: 1,
+//     time: "12pm",
+//   },
+//   {
+//     id: 2,
+//     time: "1pm",
+//     interview: {
+//       student: "Lydia Miller-Jones",
+//       interviewer: {
+//         id: 1,
+//         name: "Sylvia Palmer",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   },
+//   {
+//     id: 3,
+//     time: "2pm",
+//     interview: {
+//       student: "Mahsa Ameri",
+//       interviewer: {
+//         id: 1,
+//         name: "Sylvia Palmer",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   },
+//   {
+//     id: 4,
+//     time: "3pm",
+//     interview: {
+//       student: "Mohsen",
+//       interviewer: {
+//         id: 1,
+//         name: "Sylvia Palmer",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   },
+//   {
+//     id: 5,
+//     time: "4pm",
+//     interview: {
+//       student: "Amir",
+//       interviewer: {
+//         id: 1,
+//         name: "Sylvia Palmer",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   }
+// ];                               // We will fetch Appointments from API
 
 export default function Application(props) {
 
@@ -73,19 +74,41 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
+    appointments: {},
+    interviewers: {}
   });
   // Aliasing Actions after adding Combined State:
-  const setDay = day => setState({ ...state, day });
+  const setDay = day => setState({ ...state, day }); // We are using it to update our DayList component.
   // const setDays = days => setState({ ...state, days }); // update: for useEffect doesn't depend on state
-  const setDays = (days) => {
-    setState(prev => ({ ...prev, days }));
-  }
+  // const setDays = (days) => {
+  //   setState(prev => ({ ...prev, days }));
+  // }                                 // Need to remove, because we need to update both parts of the state at the same time
+
+  // after removing hardcoded appointments:
+  // const dailyAppointments = [];
+  // const dailyAppointments = appointmentsss // update to use getAppointmentsForDay, not hard coded
+  const dailyAppointments = getAppointmentsForDay(state, state.day); // use getAppointmentsForDay to to return an array of Appointment objects
+
 
   useEffect(() => {
-    axios.get("/api/days").then((response) => {
-      console.log([...response.data]);
-      setDays([...response.data]);
-    });
+    // axios.get("/api/days").then((response) => {
+      // console.log([...response.data]);
+      // setDays([...response.data]); UPDATE with Promise.all
+    Promise.all([
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
+    ])
+    .then((all) => {
+    // .then(([days, appointments, interviewers]) => {
+      // console.log("all", all);
+      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
+      // setState({ ...state, days: days.data, appointments: appointments.data, interviewers: interviewers.data})
+    })
+    .catch(error => console.log(error));
+
+    // Promise.all will resolve to an array of resolved promises
+    // return an obj containing multiple records using the record id as a key
   }, []); // => [] To never rerun this effect
   
   
@@ -118,7 +141,8 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
-        {appointments.map(appointment => {
+        {/* {appointments.map(appointment => {   UPDATE After deleting hardcoded appiontments */}
+        {dailyAppointments.map(appointment => {
           // console.log("appointment", appointment)
           return(
             <Appointment 
