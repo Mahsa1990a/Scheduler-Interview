@@ -23,19 +23,33 @@ export default function Application(props) {
   });
 
   function bookInterview(id, interview) {
-    console.log(id, interview);
+    // console.log(id, interview);
 
-    //Implementing the Update
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    //Update the bookInterview function to call setState with your new state object.
-    setState({...state, appointments});
+    // return axios({
+    //   method: "PUT",
+    //   url: `/api/appointments/${id}`,
+    //   data: { interview }
+    // })                              OR:
+    return axios.put(`/api/appointments/${id}`, { interview })
+    .then(response => {
+      //Implementing the Update
+      const appointment = {    //// appt state obj
+        ...state.appointments[id],
+        interview: { ...interview }
+      };
+      // keep moving up and can now make appts state obj
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+      // set state on new state obj
+      //Update the bookInterview function to call setState with your new state object.
+      setState({...state, 
+        appointments, 
+        interview: response.data // after adding PUT
+      }); // OR: setState(prev => ({...prev, appointments }));
+    })
+    .catch(error => console.log(error));
   }
 
   // Aliasing Actions after adding Combined State:

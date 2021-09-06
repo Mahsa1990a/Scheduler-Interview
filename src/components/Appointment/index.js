@@ -4,6 +4,8 @@ import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
+import Status from "./Status";
+
 import useVisualMode from "../../hooks/useVisualMode";
 
 
@@ -12,7 +14,7 @@ export default function Appointment(props) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
-  // const BACK = "BACK";
+  const SAVING = "SAVING";
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -24,8 +26,12 @@ export default function Appointment(props) {
       interviewer
     };
 
-    props.bookInterview(props.id, interview);
-    transition(SHOW);
+    transition(SAVING); // Async Status
+
+    props.bookInterview(props.id, interview)
+    // transition(SHOW);
+    .then(() => transition(SHOW));
+    
   }
 
   return (
@@ -35,6 +41,8 @@ export default function Appointment(props) {
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
         <Show
+          // // these are coming from appointment props
+
           student={props.interview.student}
           interviewer={props.interview.interviewer.name}
           // onEdit={transition("onEdit")}
@@ -50,6 +58,12 @@ export default function Appointment(props) {
           // onSave={transition("onSave")}
           onSave={save}
           onCancel={() => back("onCancel")}
+        />
+      )}
+      {/* Async Status */}
+      {mode === SAVING && (
+        <Status
+          message="Saving"
         />
       )}
     </article>
