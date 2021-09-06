@@ -6,6 +6,7 @@ import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from './Confirm';
+import Error from './Error';
 
 import useVisualMode from "../../hooks/useVisualMode";
 
@@ -19,6 +20,8 @@ export default function Appointment(props) {
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -35,16 +38,22 @@ export default function Appointment(props) {
 
     props.bookInterview(props.id, interview)
     // transition(SHOW);
-    .then(() => transition(SHOW));
+    .then(() => transition(SHOW))
+
+    // transition when axios rejects the Promise in our save and destroy functions
+    .catch(err => transition(ERROR_SAVE, true));
     
   };
 
   // function to cancel appt & delete from db
   function cancelAppt(name, interview) {
-    transition(DELETING);
+    transition(DELETING, true);
 
     props.cancelInterview(props.id, interview)
-    .then(() => transition(EMPTY));
+    .then(() => transition(EMPTY))
+
+    // transition when axios rejects the Promise in our save and destroy functions
+    .catch(err => transition(ERROR_DELETE, true));
   }
 
   return (
@@ -105,6 +114,19 @@ export default function Appointment(props) {
           interviewer={props.interview.interviewer.id}
           onCancel={() => back("onCancel")}
           onSave={save}
+        />
+      )}
+
+      {mode === ERROR_SAVE && (
+        <Error
+          onClose={() => back("onCancel")}
+          message="Could not save appointment"
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          onClose={() => back("onCancel")}
+          message="Could not cancel appointment"
         />
       )}
     </article>

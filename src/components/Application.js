@@ -27,12 +27,12 @@ export default function Application(props) {
       method: "DELETE",
       url:`/api/appointments/${id}`
     })
-    .then(response => {
-      setState({
-        ...state,
-        interview: null
-      })
-    }).catch(error => console.log(error));
+    // .then(response => {
+    //   setState({
+    //     ...state,
+    //     interview: null
+    //   })
+    // }).catch(error => console.log(error));
   }
 
   function bookInterview(id, interview) {
@@ -43,8 +43,7 @@ export default function Application(props) {
     //   url: `/api/appointments/${id}`,
     //   data: { interview }
     // })                              OR:
-    return axios.put(`/api/appointments/${id}`, { interview })
-    .then(response => {
+    // return axios.put(`/api/appointments/${id}`, { interview })
       //Implementing the Update
       const appointment = {    //// appt state obj
         ...state.appointments[id],
@@ -59,10 +58,10 @@ export default function Application(props) {
       //Update the bookInterview function to call setState with your new state object.
       setState({...state, 
         appointments, 
-        interview: response.data // after adding PUT
+        // interview: response.data // after adding PUT
       }); // OR: setState(prev => ({...prev, appointments }));
-    })
-    .catch(error => console.log(error));
+
+      return axios.put(`/api/appointments/${id}`, { interview });
   }
 
   // Aliasing Actions after adding Combined State:
