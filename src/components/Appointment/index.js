@@ -62,7 +62,8 @@ export default function Appointment(props) {
           onEdit={() => transition("onEdit")}
           // onDelete={transition("onDelete")}
           // onDelete={() => transition("onDelete")}
-          onDelete={cancelAppt}
+          // onDelete={cancelAppt}
+          onDelete={() => transition(CONFIRM)}
         />
       )}
       {mode === CREATE && (
@@ -81,16 +82,17 @@ export default function Appointment(props) {
         />
       )}
 
+      {mode === DELETING && (
+        <Status
+          message="Deleting"
+        />
+      )}
+
       {mode === CONFIRM && (
         <Confirm
           message="Are you sure?"
           onCancel={() => back("onCancel")}
           onConfirm={cancelAppt}
-        />
-      )}
-      {mode === DELETING && (
-        <Status
-          message="Deleting"
         />
       )}
     </article>
