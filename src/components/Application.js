@@ -22,6 +22,19 @@ export default function Application(props) {
     interviewers: {}
   });
 
+  function cancelInterview(id, interview) {
+    return axios({
+      method: "DELETE",
+      url:`/api/appointments/${id}`
+    })
+    .then(response => {
+      setState({
+        ...state,
+        interview: null
+      })
+    }).catch(error => console.log(error));
+  }
+
   function bookInterview(id, interview) {
     // console.log(id, interview);
 
@@ -80,6 +93,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     )
   })

@@ -5,6 +5,7 @@ import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
+import Confirm from './Confirm';
 
 import useVisualMode from "../../hooks/useVisualMode";
 
@@ -15,11 +16,14 @@ export default function Appointment(props) {
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
+  const DELETING = "DELETING";
+  const CONFIRM = "CONFIRM";
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
+  // Save appointment to db
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -32,6 +36,14 @@ export default function Appointment(props) {
     // transition(SHOW);
     .then(() => transition(SHOW));
     
+  };
+
+  // function to cancel appt & delete from db
+  function cancelAppt(name, interview) {
+    transition(DELETING);
+
+    props.cancelInterview(props.id, interview)
+    .then(() => transition(EMPTY));
   }
 
   return (
@@ -44,11 +56,13 @@ export default function Appointment(props) {
           // // these are coming from appointment props
 
           student={props.interview.student}
-          interviewer={props.interview.interviewer.name}
+          // interviewer={props.interview.interviewer.name} update:
+          interviewer={props.interview.interviewer}
           // onEdit={transition("onEdit")}
           onEdit={() => transition("onEdit")}
           // onDelete={transition("onDelete")}
-          onDelete={() => transition("onDelete")}
+          // onDelete={() => transition("onDelete")}
+          onDelete={cancelAppt}
         />
       )}
       {mode === CREATE && (
@@ -64,6 +78,19 @@ export default function Appointment(props) {
       {mode === SAVING && (
         <Status
           message="Saving"
+        />
+      )}
+
+      {mode === CONFIRM && (
+        <Confirm
+          message="Are you sure?"
+          onCancel={() => back("onCancel")}
+          onConfirm={cancelAppt}
+        />
+      )}
+      {mode === DELETING && (
+        <Status
+          message="Deleting"
         />
       )}
     </article>
