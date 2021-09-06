@@ -21,6 +21,23 @@ export default function Application(props) {
     appointments: {},
     interviewers: {}
   });
+
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+
+    //Implementing the Update
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    //Update the bookInterview function to call setState with your new state object.
+    setState({...state, appointments});
+  }
+
   // Aliasing Actions after adding Combined State:
   const setDay = day => setState({ ...state, day }); // We are using it to update our DayList component.
   // const setDays = days => setState({ ...state, days }); // update: for useEffect doesn't depend on state
@@ -29,7 +46,7 @@ export default function Application(props) {
   // }                                 // Need to remove, because we need to update both parts of the state at the same time
 
   const interviewers = getInterviewersForDay(state, state.day); //create an interviewers array that will first be passed to the Appointment
-  
+
   // after removing hardcoded appointments:
   // const dailyAppointments = [];
   // const dailyAppointments = appointmentsss // update to use getAppointmentsForDay, not hard coded
@@ -48,6 +65,7 @@ export default function Application(props) {
         time={appointment.time}
         interview={interview}
         interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     )
   })
@@ -120,7 +138,7 @@ export default function Application(props) {
           )
         })} */}
         {scedule}
-        <Appointment key="last" time="5pm" />
+        <Appointment key="last" time="5pm" bookInterview={bookInterview}/>
       </section>
     </main>
   );
