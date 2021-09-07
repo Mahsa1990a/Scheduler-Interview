@@ -1,18 +1,23 @@
 import React from "react";
 
+//we will refer to react-testing-library and @testing-library/react.
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
 import Button from "components/Button";
 
 afterEach(cleanup);
 
-it("renders without crashing", () => {
-  render(<Button />);
+//The most basic test we will do for any React component is a test render. 
+//This test verifies that we can render the component to the DOM without throwing an error.
+it("renders without crashing", () => { //it function provided by Jest. //first argument is a descriptive name for the test.
+  render(<Button />); //The second argument is a function that contains the test code.
 });
 
 it("renders its `children` prop as text", () => {
+  // The getByText query function is returned by the render function but is a part of the the dom-testing-library.
   const { getByText } = render(<Button>Default</Button>);
-  expect(getByText("Default")).toBeInTheDocument();
+  //The expect function is injected into the global scope by Jest.
+  expect(getByText("Default")).toBeInTheDocument(); //The toBeInTheDocument function is a matcher provided through Jest by the jest-dom library.
 });
 
 it("renders a default button style", () => {
