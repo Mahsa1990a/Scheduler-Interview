@@ -41,6 +41,8 @@ export default function Form(props) {
           /*
             This must be a controlled component
           */
+         //Added this to pass test for : getByTestId("student-name-input")
+          data-testid="student-name-input" 
         />
       </form>
       {/* <InterviewerList interviewers={props.interviewers} interviewer={props.interviewer} onChange={props.setInterviewer} /> UPDATE After adding state */}
