@@ -41,7 +41,10 @@ export default function Appointment(props) {
     .then(() => transition(SHOW))
 
     // transition when axios rejects the Promise in our save and destroy functions
-    .catch(err => transition(ERROR_SAVE, true));
+    .catch(err => {
+      console.log("Save Error", err);
+      transition(ERROR_SAVE, true)
+    });
     
   };
 
@@ -53,7 +56,10 @@ export default function Appointment(props) {
     .then(() => transition(EMPTY))
 
     // transition when axios rejects the Promise in our save and destroy functions
-    .catch(err => transition(ERROR_DELETE, true));
+    .catch(err => {
+      console.log("Cancel Error", err);
+      transition(ERROR_DELETE, true)
+    });
   }
 
   return (

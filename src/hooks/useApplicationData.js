@@ -8,7 +8,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function useApplicationData(props) {
+export default function useApplicationData(props) { //custom hook to manage API data
 
   // will be making requests to scheduler-api server from within the Application component
   // When we receive a response, we'll store the JSON data as the Application state.
@@ -44,17 +44,48 @@ export default function useApplicationData(props) {
     // return an obj containing multiple records using the record id as a key
   }, []); // => [] To never rerun this effect
   ///////////////////////////////////////////////////////////////////////////////////
-  function cancelInterview(id, interview) {
-    return axios({
-      method: "DELETE",
-      url:`/api/appointments/${id}`
+
+  function getUpdateSpots(newAppointments) {
+    return state.days.map((day, index) => {
+      let freeSpots = 0;
+
+      for (let key of state.days[index].appointments) {
+        if (!newAppointments[key].interview) {
+          freeSpots++;
+        }
+      }
+      const updatedSpots = {...day, spots: freeSpots}
+      return updatedSpots;
     })
+  };
+  //////////////////////////////////////////////////////////////////////////////////
+  function cancelInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    // return axios({
+    //   method: "DELETE",
+    //   url:`/api/appointments/${id}`
+    // })
     // .then(response => {
     //   setState({
     //     ...state,
     //     interview: null
     //   })
     // }).catch(error => console.log(error));
+    return (
+      axios.delete(`/api/appointments/${id}`, appointments[id])
+      .then(setState({
+        ...state, appointments, days: getUpdateSpots(appointments)
+      }))
+      .catch(err => console.log(err))
+    );
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   function bookInterview(id, interview) {
@@ -78,12 +109,19 @@ export default function useApplicationData(props) {
       };
       // set state on new state obj
       //Update the bookInterview function to call setState with your new state object.
-      setState({...state, 
-        appointments, 
-        // interview: response.data // after adding PUT
-      }); // OR: setState(prev => ({...prev, appointments }));
+      // setState({...state, 
+      //   appointments, 
+      //   // interview: response.data // after adding PUT
+      // }); // OR: setState(prev => ({...prev, appointments }));
 
-      return axios.put(`/api/appointments/${id}`, { interview });
+      // return axios.put(`/api/appointments/${id}`, { interview });
+      return (
+        axios.put(`/api/appointments/${id}`, appointments[id])
+        .then(setState({
+          ...state, appointments, days: getUpdateSpots(appointments) 
+        }))
+        .catch(err => console.log(err))
+      );
   }
 
   // Aliasing Actions after adding Combined State:

@@ -93,7 +93,7 @@ export default function Application(props) {
           )
         })} */}
         {scedule}
-        <Appointment key="last" time="5pm" bookInterview={bookInterview}/>
+        <Appointment key="last" time="5pm"/>
       </section>
     </main>
   );
