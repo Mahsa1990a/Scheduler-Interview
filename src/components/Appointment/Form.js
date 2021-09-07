@@ -10,6 +10,7 @@ export default function Form(props) {
   // It will evaluate to props.name if it is truthy. If props.name is undefined then it will use the empty string
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
+  const [error, setError] = useState("");
 
   // When the user clicks the Cancel button, we clear the form values
   function reset() {
@@ -25,6 +26,14 @@ export default function Form(props) {
   // const save = () => {   OR pass it directly
   //   props.onSave(name, interviewer);
   // }
+  
+  function validate() {
+    if (name === "") {
+      setError("Student name cannot be blank");
+      return;
+    }
+    props.onSave(name, interviewer);
+  }
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -45,6 +54,9 @@ export default function Form(props) {
           data-testid="student-name-input" 
         />
       </form>
+
+      <section className="appointment__validation">{error}</section>
+
       {/* <InterviewerList interviewers={props.interviewers} interviewer={props.interviewer} onChange={props.setInterviewer} /> UPDATE After adding state */}
       <InterviewerList interviewers={props.interviewers} interviewer={interviewer} onChange={setInterviewer} />
     </section>
@@ -53,7 +65,8 @@ export default function Form(props) {
         {/* <Button danger onClick={props.onCancel}>Cancel</Button> UPDATE after adding reset & cancel func */}
         <Button danger onClick={cancel}>Cancel</Button>
         {/* <Button confirm onClick={props.onSave}>Save</Button> UPDATE: */}
-        <Button confirm onClick={() => props.onSave(name, interviewer)}>Save</Button>
+        {/* <Button confirm onClick={() => props.onSave(name, interviewer)}>Save</Button> */}
+        <Button confirm onClick={validate}>Save</Button>
       </section>
     </section>
   </main>
