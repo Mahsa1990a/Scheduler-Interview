@@ -32,6 +32,8 @@ export default function Form(props) {
       setError("Student name cannot be blank");
       return;
     }
+
+    setError(""); // added this line for passing More Improvement TEST
     props.onSave(name, interviewer);
   }
 
