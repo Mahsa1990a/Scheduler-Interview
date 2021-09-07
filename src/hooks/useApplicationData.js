@@ -84,7 +84,7 @@ export default function useApplicationData(props) { //custom hook to manage API 
       .then(setState({
         ...state, appointments, days: getUpdateSpots(appointments)
       }))
-      .catch(err => console.log(err))
+      // .catch(err => console.log(err))
     );
   }
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ export default function useApplicationData(props) { //custom hook to manage API 
         .then(setState({
           ...state, appointments, days: getUpdateSpots(appointments) 
         }))
-        .catch(err => console.log(err))
+        // .catch(err => console.log(err))
       );
   }
 
