@@ -1,76 +1,25 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import React, { useState, useEffect } from "react";
+import React from "react";
+// import axios from "axios";
 
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
+import useApplicationData from "../hooks/useApplicationData";
+
 
 export default function Application(props) {
 
-  // will be making requests to scheduler-api server from within the Application component
-  // When we receive a response, we'll store the JSON data as the Application state.
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
 
-  // Combined State:
-  // const [day, setDay] = useState("Monday");
-  // const [days, setDays] = useState([]);     UPDATE this 2:
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
-
-  function cancelInterview(id, interview) {
-    return axios({
-      method: "DELETE",
-      url:`/api/appointments/${id}`
-    })
-    // .then(response => {
-    //   setState({
-    //     ...state,
-    //     interview: null
-    //   })
-    // }).catch(error => console.log(error));
-  }
-
-  function bookInterview(id, interview) {
-    // console.log(id, interview);
-
-    // return axios({
-    //   method: "PUT",
-    //   url: `/api/appointments/${id}`,
-    //   data: { interview }
-    // })                              OR:
-    // return axios.put(`/api/appointments/${id}`, { interview })
-      //Implementing the Update
-      const appointment = {    //// appt state obj
-        ...state.appointments[id],
-        interview: { ...interview }
-      };
-      // keep moving up and can now make appts state obj
-      const appointments = {
-        ...state.appointments,
-        [id]: appointment
-      };
-      // set state on new state obj
-      //Update the bookInterview function to call setState with your new state object.
-      setState({...state, 
-        appointments, 
-        // interview: response.data // after adding PUT
-      }); // OR: setState(prev => ({...prev, appointments }));
-
-      return axios.put(`/api/appointments/${id}`, { interview });
-  }
-
-  // Aliasing Actions after adding Combined State:
-  const setDay = day => setState({ ...state, day }); // We are using it to update our DayList component.
-  // const setDays = days => setState({ ...state, days }); // update: for useEffect doesn't depend on state
-  // const setDays = (days) => {
-  //   setState(prev => ({ ...prev, days }));
-  // }                                 // Need to remove, because we need to update both parts of the state at the same time
-
+  
   const interviewers = getInterviewersForDay(state, state.day); //create an interviewers array that will first be passed to the Appointment
 
   // after removing hardcoded appointments:
@@ -96,27 +45,6 @@ export default function Application(props) {
       />
     )
   })
-
-  useEffect(() => {
-    // axios.get("/api/days").then((response) => {
-      // console.log([...response.data]);
-      // setDays([...response.data]); UPDATE with Promise.all
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers")
-    ])
-    .then((all) => {
-    // .then(([days, appointments, interviewers]) => {
-      // console.log("all", all);
-      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
-      // setState({ ...state, days: days.data, appointments: appointments.data, interviewers: interviewers.data})
-    })
-    .catch(error => console.log(error));
-
-    // Promise.all will resolve to an array of resolved promises
-    // return an obj containing multiple records using the record id as a key
-  }, []); // => [] To never rerun this effect
   
   
   return (
